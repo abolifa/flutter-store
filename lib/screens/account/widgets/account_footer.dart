@@ -1,4 +1,5 @@
 import 'package:app/providers/auth_provider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
@@ -33,9 +34,29 @@ class AccountFooter extends StatelessWidget {
         if (authProvider.isAuthenticated)
           GestureDetector(
             onTap: () {
-              showDialog(
-                  context: context,
-                  builder: (context) => buildLogoutDialog(context));
+              showCupertinoDialog(
+                context: context,
+                builder: (context) => CupertinoAlertDialog(
+                  title: const Text('تنبيه'),
+                  content: const Text('هل تريد تسجيل الخروج؟'),
+                  actions: [
+                    CupertinoDialogAction(
+                      onPressed: () async {
+                        await authProvider.logout();
+                        if (context.mounted) {
+                          Navigator.pop(context);
+                        }
+                      },
+                      isDestructiveAction: true,
+                      child: const Text('نعم'),
+                    ),
+                    CupertinoDialogAction(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('لا'),
+                    ),
+                  ],
+                ),
+              );
             },
             child: Container(
               width: double.infinity,
@@ -171,30 +192,6 @@ class AccountFooter extends StatelessWidget {
         ),
         const SizedBox(
           height: 100,
-        ),
-      ],
-    );
-  }
-
-  Widget buildLogoutDialog(BuildContext context) {
-    return AlertDialog(
-      title: Text('تسجيل خروج'),
-      content: Text('هل تريد تسجيل خروج؟'),
-      actions: [
-        TextButton(
-          child: Text('لا'),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        TextButton(
-          child: Text('نعم'),
-          onPressed: () async {
-            await Provider.of<AuthProvider>(context, listen: false).logout();
-            if (context.mounted) {
-              Navigator.of(context).pop();
-            }
-          },
         ),
       ],
     );

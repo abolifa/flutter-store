@@ -45,7 +45,7 @@ class _NewAddressScreenState extends State<NewAddressScreen> {
       countryController.text = '+218';
       phoneController.text = widget.address!.phone;
       streetController.text = widget.address!.street;
-      landMarkController.text = widget.address!.landmark ?? '';
+      landMarkController.text = widget.address!.landmark;
       isDefault = widget.address!.defaultAddress;
     } else if (widget.selectedLocation != null) {
       cityController.text = widget.selectedLocation!.city;
@@ -63,7 +63,9 @@ class _NewAddressScreenState extends State<NewAddressScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: Navbar(
-        title: widget.isEdit ? 'تعديل العنوان' : 'اضافة عنوان جديد',
+        title: Text(
+          widget.isEdit ? 'تعديل العنوان' : 'اضافة عنوان جديد',
+        ),
         closable: true,
       ),
       body: Padding(

@@ -4,10 +4,10 @@ import 'package:app/models/address.dart';
 import 'package:app/services/api_service.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddressProvider extends ChangeNotifier {
   final ApiService _apiService = ApiService();
-
   List<Address> _addresses = [];
   bool _isLoading = false;
   String? _message;
@@ -20,6 +20,14 @@ class AddressProvider extends ChangeNotifier {
 
   Address? get defaultAddress =>
       _addresses.firstWhereOrNull((address) => address.defaultAddress);
+
+  Future<void> loadSavedAddress() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int? savedAddressId = prefs.getInt('default_address_id');
+    if (savedAddressId != null) {
+      setDefaultAddress(savedAddressId);
+    }
+  }
 
   Future<void> fetchAddresses() async {
     _isLoading = true;
@@ -35,6 +43,7 @@ class AddressProvider extends ChangeNotifier {
             .map((json) => Address.fromJson(json))
             .toList();
         notifyListeners();
+        loadSavedAddress();
       } else {
         _message = 'حدث خطأ اثناء تحميل العناوين';
       }
@@ -159,11 +168,14 @@ class AddressProvider extends ChangeNotifier {
     return false;
   }
 
-  void _setDefaultAddress(int newDefaultId) {
+  Future<void> setDefaultAddress(int newDefaultId) async {
     for (var i = 0; i < _addresses.length; i++) {
       _addresses[i] = _addresses[i]
           .copyWith(defaultAddress: _addresses[i].id == newDefaultId);
     }
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('default_address_id', newDefaultId);
+
     notifyListeners();
   }
 }

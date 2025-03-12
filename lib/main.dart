@@ -2,6 +2,9 @@ import 'package:app/helpers/colors.dart';
 import 'package:app/helpers/route_generator.dart';
 import 'package:app/providers/address_provider.dart';
 import 'package:app/providers/auth_provider.dart';
+import 'package:app/providers/favorite_provider.dart';
+import 'package:app/providers/home_data_provider.dart';
+import 'package:app/providers/section_product_provider.dart';
 import 'package:app/screens/main_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -16,6 +19,9 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => AddressProvider()),
+        ChangeNotifierProvider(create: (_) => HomeDataProvider()),
+        ChangeNotifierProvider(create: (_) => SectionProductProvider()),
+        ChangeNotifierProvider(create: (_) => FavoriteProvider()),
         // ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ],
       child: const MyApp(),

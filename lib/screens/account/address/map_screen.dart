@@ -25,6 +25,7 @@ class MapScreenState extends State<MapScreen> {
   }
 
   Future<void> _getCurrentLocation() async {
+    // ignore: unused_local_variable
     Position position = await Geolocator.getCurrentPosition(
       locationSettings: LocationSettings(
         accuracy: LocationAccuracy.high,
@@ -81,7 +82,7 @@ class MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Navbar(
-        title: 'حدد الموقع',
+        title: Text('حدد الموقع'),
         centerTitle: true,
         closable: true,
       ),
