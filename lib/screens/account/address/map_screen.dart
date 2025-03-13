@@ -25,7 +25,29 @@ class MapScreenState extends State<MapScreen> {
   }
 
   Future<void> _getCurrentLocation() async {
-    // ignore: unused_local_variable
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Request to enable location services
+      await Geolocator.openLocationSettings();
+      return;
+    }
+
+    // Check and request location permissions
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return; // Permissions are denied, exit the function
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return;
+    }
+
     Position position = await Geolocator.getCurrentPosition(
       locationSettings: LocationSettings(
         accuracy: LocationAccuracy.high,
@@ -35,8 +57,7 @@ class MapScreenState extends State<MapScreen> {
     );
 
     setState(() {
-      // selectedLocation = LatLng(position.latitude, position.longitude);
-      selectedLocation = LatLng(32.36864256805521, 15.097455494105816);
+      selectedLocation = LatLng(position.latitude, position.longitude);
       isLoading = false;
     });
 

@@ -15,8 +15,7 @@ class FavoriteProvider extends ChangeNotifier {
   Future<void> loadFavorites() async {
     _message = null;
     try {
-      final response =
-          await _apiService.get('favorites'); // Fetch favorites from API
+      final response = await _apiService.get('favorites');
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
         _favoriteProductIds = List<int>.from(data);
@@ -44,8 +43,7 @@ class FavoriteProvider extends ChangeNotifier {
   Future<void> removeFavorite(int productId) async {
     _message = null;
     try {
-      final response =
-          await _apiService.delete('favorites/$productId'); // Use dynamic route
+      final response = await _apiService.delete('favorites/$productId');
       if (response.statusCode == 200) {
         _favoriteProductIds.remove(productId);
         notifyListeners();

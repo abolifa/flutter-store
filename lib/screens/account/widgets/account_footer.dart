@@ -1,4 +1,5 @@
 import 'package:app/providers/auth_provider.dart';
+import 'package:app/providers/home_data_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -44,6 +45,7 @@ class AccountFooter extends StatelessWidget {
                       onPressed: () async {
                         await authProvider.logout();
                         if (context.mounted) {
+                          context.read<HomeDataProvider>().fetchHomeData();
                           Navigator.pop(context);
                         }
                       },

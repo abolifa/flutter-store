@@ -4,6 +4,7 @@ import 'package:app/providers/address_provider.dart';
 import 'package:app/providers/auth_provider.dart';
 import 'package:app/providers/favorite_provider.dart';
 import 'package:app/providers/home_data_provider.dart';
+import 'package:app/providers/product_provider.dart';
 import 'package:app/providers/section_product_provider.dart';
 import 'package:app/screens/main_home_screen.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => HomeDataProvider()),
         ChangeNotifierProvider(create: (_) => SectionProductProvider()),
         ChangeNotifierProvider(create: (_) => FavoriteProvider()),
+        ChangeNotifierProvider(create: (_) => ProductProvider()),
         // ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ],
       child: const MyApp(),

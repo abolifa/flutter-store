@@ -14,17 +14,36 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeScreen> createState() => HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> {
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<HomeDataProvider>().fetchHomeData();
-      context.read<FavoriteProvider>().loadFavorites();
+      _fetchData();
     });
+    _scrollController.addListener(_scrollListener);
+  }
+
+  Future<void> _fetchData() async {
+    await context.read<HomeDataProvider>().fetchHomeData();
+    await context.read<FavoriteProvider>().loadFavorites();
+  }
+
+  void _scrollListener() {
+    setState(() {});
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0.0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
   }
 
   @override
@@ -49,7 +68,6 @@ class _HomeScreenState extends State<HomeScreen> {
             return Center(child: Text('No data available'));
           } else {
             final categories = provider.homeData!.categories;
-            // final brands = provider.homeData!.brands;
             final sections = provider.homeData!.sections;
             final offers = provider.homeData!.offers;
             final sliders = provider.homeData!.sliders;
@@ -70,34 +88,39 @@ class _HomeScreenState extends State<HomeScreen> {
                 .toList();
 
             return SafeArea(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                  child: Column(
-                    spacing: 5,
-                    children: [
-                      const SizedBox(height: 5),
-                      if (sliders.isNotEmpty) MainCarousel(sliders: sliders),
-                      if (offersTop.isNotEmpty) OfferWidget(offers: offersTop),
-                      if (offersBelowSlider.isNotEmpty)
-                        OfferWidget(offers: offersBelowSlider),
-                      if (categories.isNotEmpty)
-                        CategoryBubble(categories: categories),
-                      if (offersBelowCategories.isNotEmpty)
-                        OfferWidget(offers: offersBelowCategories),
-                      if (sections.isNotEmpty)
-                        for (final section in sections)
-                          Container(
-                            height: 350,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
+              child: RefreshIndicator(
+                onRefresh: _fetchData, // Refresh only the body content
+                child: SingleChildScrollView(
+                  controller: _scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 5),
+                        if (sliders.isNotEmpty) MainCarousel(sliders: sliders),
+                        if (offersTop.isNotEmpty)
+                          OfferWidget(offers: offersTop),
+                        if (offersBelowSlider.isNotEmpty)
+                          OfferWidget(offers: offersBelowSlider),
+                        if (categories.isNotEmpty)
+                          CategoryBubble(categories: categories),
+                        if (offersBelowCategories.isNotEmpty)
+                          OfferWidget(offers: offersBelowCategories),
+                        if (sections.isNotEmpty)
+                          for (final section in sections)
+                            Container(
+                              height: 380,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                              ),
+                              child: SectionWidget(section: section),
                             ),
-                            child: SectionWidget(section: section),
-                          ),
-                      if (offersBelowSection.isNotEmpty)
-                        OfferWidget(offers: offersBelowSection),
-                      const SizedBox(height: 50),
-                    ],
+                        if (offersBelowSection.isNotEmpty)
+                          OfferWidget(offers: offersBelowSection),
+                        const SizedBox(height: 50),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -105,6 +128,27 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         },
       ),
+      floatingActionButton:
+          _scrollController.hasClients && _scrollController.offset > 500
+              ? SizedBox(
+                  height: 40,
+                  width: 40,
+                  child: FloatingActionButton(
+                    backgroundColor: Colors.white,
+                    onPressed: _scrollToTop,
+                    child: const Icon(
+                      Icons.arrow_upward,
+                      size: 20,
+                    ),
+                  ),
+                )
+              : null,
     );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 }

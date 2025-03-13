@@ -1,3 +1,4 @@
+import 'package:app/providers/auth_provider.dart';
 import 'package:app/providers/favorite_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,10 +11,23 @@ class FavoriteButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final favoriteProvider = Provider.of<FavoriteProvider>(context);
+    final authProvider = Provider.of<AuthProvider>(context);
     final isFavorite = favoriteProvider.isFavorite(productId);
 
     return GestureDetector(
-      onTap: () => favoriteProvider.toggleFavorite(productId),
+      onTap: () => {
+        if (authProvider.isAuthenticated)
+          {favoriteProvider.toggleFavorite(productId)}
+        else
+          {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('يجب تسجيل الدخول أولاً'),
+              ),
+            ),
+            Navigator.pushNamed(context, '/login'),
+          }
+      },
       child: Container(
         height: 35,
         width: 35,

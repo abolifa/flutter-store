@@ -24,9 +24,6 @@ class HomeDataProvider with ChangeNotifier {
     try {
       _errorMessage = null;
       final response = await _apiService.get('home');
-
-      print(response.body);
-
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
         _homeData = HomeData.fromJson(data);
@@ -37,7 +34,6 @@ class HomeDataProvider with ChangeNotifier {
       }
     } catch (e) {
       _errorMessage = e.toString();
-      print("Error fetching home data: $e");
     } finally {
       _isLoading = false;
       notifyListeners();

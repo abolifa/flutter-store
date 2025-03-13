@@ -16,13 +16,14 @@ class OfferWidget extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         final offer = offers[index];
         return Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 10,
+          padding: const EdgeInsets.only(
+            left: 20,
+            top: 10,
+            bottom: 10,
+            right: 20,
           ),
-          child: Container(
-            height: MediaQuery.sizeOf(context).width / 3,
-            margin: const EdgeInsets.only(bottom: 5),
+          child: SizedBox(
+            height: MediaQuery.sizeOf(context).width / 4.5,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(5),
               child: Image.network(

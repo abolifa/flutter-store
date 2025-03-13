@@ -4,6 +4,7 @@ import 'package:app/screens/account/address/addresses_screen.dart';
 import 'package:app/screens/account/address/map_screen.dart';
 import 'package:app/screens/account/address/new_address_screen.dart';
 import 'package:app/screens/auth/login_screen.dart';
+import 'package:app/screens/home/favorite/favorite_screen.dart';
 import 'package:app/screens/main_home_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -41,6 +42,9 @@ class RouteGenerator {
         return _errorRoute();
       case '/new-address-map':
         return MaterialPageRoute(builder: (_) => MapScreen());
+
+      case '/favorite':
+        return MaterialPageRoute(builder: (_) => FavoriteScreen());
       default:
         return MaterialPageRoute(builder: (_) => MainHomeScreen());
     }

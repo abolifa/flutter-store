@@ -70,6 +70,7 @@ class AuthProvider extends ChangeNotifier {
         final customerData = responseData['user'];
         await _saveToken(token);
         _customer = Customer.fromJson(customerData);
+
         notifyListeners();
         return true;
       } else {

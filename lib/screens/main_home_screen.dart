@@ -16,20 +16,20 @@ class MainHomeScreen extends StatefulWidget {
 class _MainHomeScreenState extends State<MainHomeScreen> {
   int _selectedIndex = 0;
 
-  final List<Widget> _screens = [
-    const HomeScreen(),
-    const CategoryScreen(),
-    const OfferScreen(),
-    const AccountScreen(),
-    const CartScreens(),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final List<Widget> screens = [
+      HomeScreen(),
+      const CategoryScreen(),
+      const OfferScreen(),
+      const AccountScreen(),
+      const CartScreens(),
+    ];
+
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,
-        children: _screens,
+        children: screens,
       ),
       bottomNavigationBar: BottomNavigationBar(
         iconSize: 25,

@@ -22,12 +22,6 @@ class ProductWidgetState extends State<ProductWidget> {
     _currentProduct = widget.product;
   }
 
-  void _updateVariant(ProductVariant variant) {
-    setState(() {
-      _currentProduct = _currentProduct.copyWith(variants: [variant]);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -51,7 +45,7 @@ class ProductWidgetState extends State<ProductWidget> {
                   GeneralWidgets.getNetworkImage(_currentProduct.image),
                   fit: BoxFit.contain,
                   width: double.infinity,
-                  height: 140,
+                  height: 180,
                 ),
               ),
               Positioned(
@@ -78,12 +72,12 @@ class ProductWidgetState extends State<ProductWidget> {
           Text(
             _currentProduct.name,
             style: TextStyle(
-              fontSize: 13,
+              fontSize: 12,
               fontWeight: FontWeight.w500,
             ),
             textAlign: TextAlign.right,
             overflow: TextOverflow.ellipsis,
-            maxLines: 1,
+            maxLines: 2,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,

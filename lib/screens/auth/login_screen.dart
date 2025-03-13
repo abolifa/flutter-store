@@ -1,4 +1,7 @@
+import 'package:app/providers/address_provider.dart';
 import 'package:app/providers/auth_provider.dart';
+import 'package:app/providers/favorite_provider.dart';
+import 'package:app/providers/home_data_provider.dart';
 import 'package:app/widgets/button.dart';
 import 'package:app/widgets/input.dart';
 import 'package:flutter/material.dart';
@@ -78,22 +81,22 @@ class _LoginScreenState extends State<LoginScreen> {
                         passwordController.text,
                       );
 
-                      if (success) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('تم تسجيل الدخول بنجاح'),
-                          ),
-                        );
+                      if (success && context.mounted) {
+                        context.read<AddressProvider>().fetchAddresses();
+                        context.read<FavoriteProvider>().loadFavorites();
+                        context.read<HomeDataProvider>().fetchHomeData();
                         Navigator.pop(context);
                       } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              authProvider.errorMessage ??
-                                  'خطاء في تسجيل الدخول',
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                authProvider.errorMessage ??
+                                    'خطاء في تسجيل الدخول',
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        }
                       }
                     },
                     height: 50,

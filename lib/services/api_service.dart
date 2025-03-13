@@ -14,15 +14,20 @@ class ApiService {
 
   Future<Map<String, String>> _getHeaders() async {
     String? token = await getToken();
-    return {
+    Map<String, String> headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      if (token != null) 'Authorization': 'Bearer $token',
     };
+    if (token != null) {
+      headers['Authorization'] = 'Bearer $token';
+    }
+    return headers;
   }
 
-  Future<http.Response> get(String endpoint) async {
-    final url = Uri.parse('${Constant.baseUrl}$endpoint');
+  Future<http.Response> get(String endpoint,
+      {Map<String, String>? queryParameters}) async {
+    final url = Uri.parse('${Constant.baseUrl}$endpoint')
+        .replace(queryParameters: queryParameters);
     final headers = await _getHeaders();
     return await http.get(url, headers: headers);
   }

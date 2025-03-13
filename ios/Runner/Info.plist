@@ -50,16 +50,15 @@
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>We need your location to show your current position on the map.</string>
 
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>We need your location for continuous tracking.</string>
-
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>We need your location to show your current position.</string>
+    <string>We need your location to show your current position and track location updates when needed.</string>
 
-    <!-- Background Location (Only if needed) -->
-    <!-- <key>UIBackgroundModes</key>
+    <!-- Background Location (Uncomment if required) -->
+    <!--
+    <key>UIBackgroundModes</key>
     <array>
         <string>location</string>
-    </array> -->
+    </array>
+    -->
 </dict>
 </plist>
